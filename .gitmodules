@@ -1,0 +1,4 @@
+[submodule "bicep-maltrail/src/utils"]
+	path = bicep-maltrail/src/utils
+	url = https://github.com/maldwg/BICEP_Utils.git
+	branch = main
