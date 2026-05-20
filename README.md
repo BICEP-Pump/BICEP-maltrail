@@ -1,15 +1,41 @@
-# BICEP Maltrail Image
+<div align="center">
+<a href="https://github.com/BICEP-Pump/BICEP-maltrail/pkgs/container/bicep-maltrail"><img alt="Container Registry" src="https://img.shields.io/badge/GHCR-bicep--maltrail-blue?style=for-the-badge&logo=github"></a>
+<img alt="Codecov" src="https://img.shields.io/codecov/c/github/BICEP-Pump/BICEP-maltrail?style=for-the-badge">
+<img alt="GitHub branch status" src="https://img.shields.io/github/checks-status/BICEP-Pump/BICEP-maltrail/main?style=for-the-badge&label=Tests">
 
-Maltrail image wrapper for BICEP. This repository adapts the upstream `ghcr.io/stamparm/maltrail` image to the IDS plugin interface used by BICEP and exposes the usual configuration, custom-trails, static-analysis, and network-analysis endpoints.
+<br>
 
-## What changed from the Snort sample
+</div>
 
-- The runtime now launches Maltrail's `sensor.py` instead of Snort.
-- Uploaded IDS configs are treated as `maltrail.conf` files and are patched so logs always land in `/opt/logs`.
-- The `ruleset` upload is mapped to Maltrail custom trails and stored in `CUSTOM_TRAILS_DIR`.
-- Parsed alerts now come from Maltrail's daily event logs rather than `alert_fast.txt`.
+# BICEP-maltrail
+Maltrail Docker image adapted for BICEP.
 
-## Build locally
+The image holds the dependencies and IDS plugin interface implementation needed to run Maltrail inside the BICEP application. It supports BICEP configuration uploads, custom trail uploads, static PCAP analysis, and live network analysis through Maltrail's `sensor.py`.
+
+The main BICEP project is available [here](https://github.com/maldwg/BICEP/tree/main) <br>
+The official Maltrail repository can be found [here](https://github.com/stamparm/maltrail)
+
+## Usage
+
+If you want to use the resulting image with the BICEP framework, provide a valid `maltrail.conf` configuration. During analysis, the wrapper applies the runtime values that BICEP expects: Maltrail writes logs to `/opt/logs`, live analysis uses the BICEP-managed tap interface, and static analysis uses `any` while reading the uploaded PCAP.
+
+Custom rules uploaded through BICEP are treated as Maltrail custom trails. They are stored in `/tmp/custom-trails/custom_trails.txt`, and the wrapper patches `CUSTOM_TRAILS_DIR` into the active configuration when custom trails are present.
+
+A starter configuration is included at [bicep-maltrail/maltrail.conf](bicep-maltrail/maltrail.conf).
+
+## Initialize project
+
+In order to be able to start the project you will need to initialize it first. Do this by running:
+
+```bash
+git submodule update --init --recursive
+```
+
+This fetches the newest version of the submodule for the backend code and is necessary for the application to work seamlessly.
+
+## Building the project
+
+To build a local version of the image for testing purposes, run:
 
 ```bash
 cd ./bicep-maltrail
@@ -20,13 +46,4 @@ docker buildx build . \
   --no-cache
 ```
 
-## CI/CD
-
-- Pushes run the plugin test suite in `bicep-maltrail/src/tests`.
-- Scheduled, merged, or manually dispatched publish workflows build from the latest upstream Maltrail release tag and push the wrapper image to GHCR.
-
-## Notes for BICEP usage
-
-- Maltrail needs a valid `maltrail.conf`. A starter example is included at [bicep-maltrail/maltrail.conf](/home/max/Masterarbeit/BICEP-maltrail/bicep-maltrail/maltrail.conf).
-- Live analysis updates `MONITOR_INTERFACE` to the BICEP-managed tap interface before launching the sensor.
-- Static analysis runs Maltrail in offline mode with `sensor.py -r <pcap>`.
+Change the version to your desired upstream Maltrail version.
