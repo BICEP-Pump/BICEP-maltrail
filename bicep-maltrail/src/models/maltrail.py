@@ -15,7 +15,7 @@ class Maltrail(IDSBase):
     default_configuration_location = "/opt/maltrail/maltrail.conf"
     custom_trails_directory = "/tmp/custom-trails"
     custom_trails_file_name = "custom_trails.txt"
-    sensor_path = "/opt/maltrail/sensor.py"
+    sensor_path = "/opt/maltrail/server.py"
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
