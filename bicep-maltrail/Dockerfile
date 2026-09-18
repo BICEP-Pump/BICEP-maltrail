@@ -21,6 +21,5 @@ ENV IDS_CLASS=Maltrail
 ENV MALTRAIL_DEFAULT_CONFIG_LOCATION=/opt/maltrail/maltrail.conf
 ENV MALTRAIL_CONFIGURATION_LOCATION=/tmp/configuration/maltrail.conf
 ENV MALTRAIL_LOG_DIRECTORY=/opt/logs
-ENV MALTRAIL_CUSTOM_TRAILS_DIR=/tmp/custom-trails
 
 CMD ["/bin/bash", "-c", "fastapi dev /opt/code/src/main.py --host 0.0.0.0 --port ${PORT}"]
