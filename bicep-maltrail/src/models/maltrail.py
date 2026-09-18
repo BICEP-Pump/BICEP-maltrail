@@ -9,8 +9,8 @@ from .maltrail_parser import MaltrailParser
 
 
 class Maltrail(IDSBase):
-    parser = None
     log_location = "/opt/logs"
+    parser = MaltrailParser(log_location)
     configuration_location = "/tmp/maltrail.conf"
     default_configuration_location = "/opt/maltrail/maltrail.conf"
     custom_trails_directory = "/tmp/custom-trails"
