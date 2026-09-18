@@ -4,6 +4,8 @@ ARG VERSION
 FROM ${BASE_IMAGE}:${VERSION}
 
 RUN mkdir -p /opt/code
+RUN mkdir -p /opt/logs
+
 WORKDIR /opt/code
 
 COPY ./requirements.txt /opt/code/requirements.txt
