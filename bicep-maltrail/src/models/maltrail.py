@@ -15,7 +15,7 @@ class Maltrail(IDSBase):
     default_configuration_location = "/opt/maltrail/maltrail.conf"
     custom_trails_directory = "/tmp/custom-trails"
     custom_trails_file_name = "custom_trails.txt"
-    sensor_path = "/opt/maltrail/server.py"
+    sensor_path = "maltrail-sensor"
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -71,13 +71,12 @@ class Maltrail(IDSBase):
 
     async def execute_network_analysis_command(self):
         self.write_runtime_configuration(self.tap_interface_name or "any")
-        command = ["python3", self.sensor_path, "-c", self.configuration_location]
+        command = [self.sensor_path, "-c", self.configuration_location]
         return await execute_command_async(command)
 
     async def execute_static_analysis_command(self, file_path):
         self.write_runtime_configuration("any")
         command = [
-            "python3",
             self.sensor_path,
             "-c",
             self.configuration_location,
